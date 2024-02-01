@@ -48,16 +48,16 @@ jobs:
           tags: ghcr.io/${{ github.repository_owner }}/devbox:latest
 
       # Sign container
-      - uses: sigstore/cosign-installer@v3.3.0
-      - name: Sign container image
-        if: github.event_name != 'pull_request'
-        run: |
-          cosign sign -y --key env://COSIGN_PRIVATE_KEY ghcr.io/${{ github.repository_owner }}/devbox@latest
-        env:
-          TAGS: ${{ steps.push.outputs.digest }}
-          COSIGN_EXPERIMENTAL: false
-          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+      # - uses: sigstore/cosign-installer@v3.3.0
+      # - name: Sign container image
+      #   if: github.event_name != 'pull_request'
+      #   run: |
+      #     cosign sign -y --key env://COSIGN_PRIVATE_KEY ghcr.io/${{ github.repository_owner }}/devbox@latest
+      #   env:
+      #     TAGS: ${{ steps.push.outputs.digest }}
+      #     COSIGN_EXPERIMENTAL: false
+      #     COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
 
-      - name: Echo outputs
-        run: |
-          echo "${{ toJSON(steps.push.outputs) }}"
+      # - name: Echo outputs
+      #   run: |
+      #     echo "${{ toJSON(steps.push.outputs) }}"
