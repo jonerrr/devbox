@@ -26,3 +26,4 @@ yay -S --noconfirm \
 rustup toolchain install stable-x86_64-unknown-linux-gnu
 
 distrobox-export --app code
+distrobox-export --bin /usr/sbin/podman-compose
