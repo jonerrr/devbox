@@ -15,6 +15,7 @@ yay -S --noconfirm \
     nushell \
     p7zip \
     pnpm \
+    podman-compose \
     rustup \
     tldr \
     unzip \
