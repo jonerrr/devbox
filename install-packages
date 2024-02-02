@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -oue pipefail
+
+yay -S --noconfirm \
+    fluxcd \
+    cloudflared-bin \
+    chezmoi \
+    fluxcd \
+    helm \
+    k9s \
+    kubectl-bin \
+    kubeseal \
+    mise-bin \
+    mkcert \
+    neovim \
+    nushell \
+    p7zip \
+    pnpm \
+    rustup \
+    tldr \
+    unzip \
+    visual-studio-code-bin \
+    xclip \
+    zip
+
+rustup toolchain install stable-x86_64-unknown-linux-gnu
+
+distrobox-export --app code

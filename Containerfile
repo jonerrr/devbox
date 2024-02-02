@@ -16,3 +16,8 @@ RUN git clone https://aur.archlinux.org/yay.git && cd yay && makepkg --noconfirm
 # Add root check back to be safe
 RUN sed -e '/exit \$E_ROOT/ s/^#//' -i /usr/bin/makepkg
 
+RUN ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \ 
+    ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
+    ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree
+
+COPY install-packages /usr/local/bin/install-packages
