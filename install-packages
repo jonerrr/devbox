@@ -3,7 +3,6 @@ set -oue pipefail
 
 yay -S --noconfirm \
     fluxcd \
-    cloudflared-bin \
     chezmoi \
     fluxcd \
     helm \
