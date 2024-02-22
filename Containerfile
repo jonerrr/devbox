@@ -1,23 +1,70 @@
-FROM quay.io/toolbx-images/archlinux-toolbox:latest
+FROM registry.fedoraproject.org/fedora-toolbox:39 
 
 LABEL com.github.containers.toolbox="true"
 
-# First install reflector and update mirrors and keyring. I was getting key issues before this.
-# RUN sudo pacman --noconfirm -S reflector
-# RUN sudo reflector --save /etc/pacman.d/mirrorlist --country 'United States' --protocol https --latest 5
-RUN sudo pacman-key --init
-RUN sudo pacman -S --noconfirm archlinux-keyring
+RUN cat <<EOF | tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/repodata/repomd.xml.key
+EOF
 
-RUN sudo pacman --noconfirm -Syyu
+RUN sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
+    sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
 
-# Disable root check for mkpkg and install yay
-RUN sed -e '/exit \$E_ROOT/ s/^#*/#/' -i /usr/bin/makepkg
-RUN git clone https://aur.archlinux.org/yay.git && cd yay && makepkg --noconfirm -si
-# Add root check back to be safe
-RUN sed -e '/exit \$E_ROOT/ s/^#//' -i /usr/bin/makepkg
+RUN dnf copr enable atim/nushell -y
+
+RUN dnf update -y && \
+    dnf install -y \
+    dnf-plugins-core \
+    age \
+    jq \
+    neovim \
+    tldr \
+    nss-tools \
+    unzip \
+    zip \
+    p7zip \
+    helm \
+    kubectl \
+    nushell \
+    podman-compose \
+    rust \
+    cargo \
+    code \
+    xclip \
+    openssl-devel
+
+# dnf-plugins-core needs to be installed before i can run config-manager
+RUN dnf config-manager --add-repo https://mise.jdx.dev/rpm/mise.repo && \
+    dnf install -y mise && \
+    mise use -g node@20 
+# mise plugin install pnpm protoc
+
+RUN dnf clean all
+
+RUN KUBESEAL_VERSION=$(curl -s https://api.github.com/repos/bitnami-labs/sealed-secrets/tags | jq -r '.[0].name' | cut -c 2-) && \
+    wget "https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-amd64.tar.gz" && \
+    tar -xzf kubeseal-${KUBESEAL_VERSION}-linux-amd64.tar.gz kubeseal && \
+    install -m 755 kubeseal /usr/local/bin/kubeseal
+
+RUN curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" && \
+    chmod +x mkcert-v*-linux-amd64 && \
+    cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
+
+RUN curl -JLO "https://github.com/derailed/k9s/releases/download/v0.31.9/k9s_Darwin_amd64.tar.gz" && \
+    tar -xzf k9s_Darwin_amd64.tar.gz && \
+    chmod +x k9s && \
+    cp k9s /usr/local/bin/k9s
+
+RUN curl -s https://fluxcd.io/install.sh | bash
+
+RUN sh -c "$(curl -fsLS get.chezmoi.io)"
 
 RUN ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \ 
     ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
     ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree
 
-COPY install-packages /usr/local/bin/install-packages
+COPY finish-setup /usr/local/bin/finish-setup
