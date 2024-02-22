@@ -2,5 +2,10 @@ cargo install sqlx-cli --no-default-features --features native-tls,postgres
 cargo install cargo-edit
 cargo install --locked blue-build
 
+mise use -g node@20
+mise plugin install pnpm protoc -y
+mise use -g pnpm@latest
+mise use -g protoc@latest
+
 distrobox-export --app code
 distrobox-export --bin /usr/sbin/podman-compose

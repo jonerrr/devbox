@@ -35,12 +35,18 @@ RUN dnf update -y && \
     cargo \
     code \
     xclip \
-    openssl-devel
+    openssl-devel 
+# readline-devel \
+# zlib-devel \
+# libcurl-devel \
+# uuid-devel \
+# libuuid-devel
+
+
 
 # dnf-plugins-core needs to be installed before i can run config-manager
 RUN dnf config-manager --add-repo https://mise.jdx.dev/rpm/mise.repo && \
-    dnf install -y mise && \
-    mise use -g node@20 
+    dnf install -y mise
 # mise plugin install pnpm protoc
 
 RUN dnf clean all
