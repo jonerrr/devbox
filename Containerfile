@@ -22,6 +22,7 @@ RUN dnf config-manager --add-repo https://mise.jdx.dev/rpm/mise.repo
 
 RUN dnf update -y && \
     dnf install -y \
+    git \
     age \
     jq \
     neovim \
@@ -47,8 +48,6 @@ RUN dnf update -y && \
 # uuid-devel \
 # libuuid-devel
 
-# mise plugin install pnpm protoc
-
 RUN dnf clean all
 
 RUN KUBESEAL_VERSION=$(curl -s https://api.github.com/repos/bitnami-labs/sealed-secrets/tags | jq -r '.[0].name' | cut -c 2-) && \
@@ -73,4 +72,5 @@ RUN ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \
     ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
     ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree
 
+RUN chmod +x finish-setup
 COPY finish-setup /usr/local/bin/finish-setup
