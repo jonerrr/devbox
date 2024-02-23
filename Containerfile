@@ -2,6 +2,8 @@ FROM quay.io/fedora/fedora:39
 
 LABEL com.github.containers.toolbox="true"
 
+RUN dnf install -y dnf-plugins-core
+
 RUN cat <<EOF | tee /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
@@ -16,9 +18,10 @@ RUN sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
 
 RUN dnf copr enable atim/nushell -y
 
+RUN dnf config-manager --add-repo https://mise.jdx.dev/rpm/mise.repo
+
 RUN dnf update -y && \
     dnf install -y \
-    dnf-plugins-core \
     age \
     jq \
     neovim \
@@ -35,18 +38,14 @@ RUN dnf update -y && \
     cargo \
     code \
     xclip \
-    openssl-devel 
+    openssl-devel \
+    mise
 # readline-devel \
 # zlib-devel \
 # libcurl-devel \
 # uuid-devel \
 # libuuid-devel
 
-
-
-# dnf-plugins-core needs to be installed before i can run config-manager
-RUN dnf config-manager --add-repo https://mise.jdx.dev/rpm/mise.repo && \
-    dnf install -y mise
 # mise plugin install pnpm protoc
 
 RUN dnf clean all
