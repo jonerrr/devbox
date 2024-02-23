@@ -39,7 +39,8 @@ RUN dnf update -y && \
     code \
     xclip \
     openssl-devel \
-    mise
+    mise \
+    wget
 # readline-devel \
 # zlib-devel \
 # libcurl-devel \
