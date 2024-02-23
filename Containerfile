@@ -72,5 +72,5 @@ RUN ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \
     ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
     ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree
 
-RUN chmod +x finish-setup
 COPY finish-setup /usr/local/bin/finish-setup
+RUN chmod +x /usr/local/bin/finish-setup
