@@ -1,4 +1,4 @@
-FROM registry.fedoraproject.org/fedora-toolbox:39 
+FROM quay.io/fedora/fedora:39 
 
 LABEL com.github.containers.toolbox="true"
 
