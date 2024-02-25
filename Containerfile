@@ -70,7 +70,9 @@ RUN sh -c "$(curl -fsLS get.chezmoi.io)"
 
 RUN ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \ 
     ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
-    ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree
+    ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree && \
+    ln -fs /usr/bin/distrobox-host-exec /usr/bin/restic && \
+    ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/resticprofile
 
 COPY finish-setup /usr/local/bin/finish-setup
 RUN chmod +x /usr/local/bin/finish-setup
