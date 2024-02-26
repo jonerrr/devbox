@@ -43,11 +43,6 @@ RUN dnf update -y && \
     mise \
     wget \
     skopeo
-# readline-devel \
-# zlib-devel \
-# libcurl-devel \
-# uuid-devel \
-# libuuid-devel
 
 RUN dnf clean all
 
@@ -65,9 +60,7 @@ RUN curl -JLO "https://github.com/derailed/k9s/releases/download/v0.31.9/k9s_Dar
     chmod +x k9s && \
     cp k9s /usr/local/bin/k9s
 
-RUN LATEST_VERSION=$(curl https://api.github.com/repos/sigstore/cosign/releases/latest | grep tag_name | cut -d : -f2 | tr -d "v\", ") && \
-    curl -O -L "https://github.com/sigstore/cosign/releases/latest/download/cosign-${LATEST_VERSION}-1.x86_64.rpm" && \
-    sudo dnf install cosign-${LATEST_VERSION}.x86_64.rpm
+RUN dnf install -y https://github.com/sigstore/cosign/releases/latest/download/cosign-$(curl https://api.github.com/repos/sigstore/cosign/releases/latest | grep tag_name | cut -d : -f2 | tr -d "v\", ")-1.x86_64.rpm
 
 RUN curl -s https://fluxcd.io/install.sh | bash
 
@@ -77,7 +70,8 @@ RUN ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \
     ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
     ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree && \
     ln -fs /usr/bin/distrobox-host-exec /usr/bin/restic && \
-    ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/resticprofile
+    ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/resticprofile && \
+    ln -s /usr/bin/distrobox-host-exec /usr/local/bin/xdg-open
 
 COPY finish-setup /usr/local/bin/finish-setup
 RUN chmod +x /usr/local/bin/finish-setup
