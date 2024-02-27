@@ -1,4 +1,4 @@
-FROM quay.io/fedora/fedora:39 
+FROM registry.fedoraproject.org/fedora-toolbox:39 
 
 LABEL com.github.containers.toolbox="true"
 
@@ -35,8 +35,7 @@ RUN dnf update -y && \
     kubectl \
     nushell \
     podman-compose \
-    rust \
-    cargo \
+    rustup \
     code \
     xclip \
     openssl-devel \
