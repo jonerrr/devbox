@@ -41,7 +41,9 @@ RUN dnf update -y && \
     openssl-devel \
     mise \
     wget \
-    skopeo
+    skopeo \
+    gcc \
+    gcc-c++
 
 RUN dnf clean all
 
