@@ -8,4 +8,5 @@ mise use -g pnpm@latest
 mise use -g protoc@latest
 
 distrobox-export --app code
+distrobox-export --bin /usr/bin/nu
 # distrobox-export --bin /usr/bin/podman-compose

@@ -71,6 +71,7 @@ RUN ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \
     ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
     ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree && \
     ln -fs /usr/bin/distrobox-host-exec /usr/bin/restic && \
+    ln -s /usr/bin/distrobox-host-exec /usr/bin/rclone && \
     ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/resticprofile && \
     ln -s /usr/bin/distrobox-host-exec /usr/local/bin/xdg-open
 
