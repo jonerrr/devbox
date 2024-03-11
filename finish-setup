@@ -9,4 +9,4 @@ mise use -g protoc@latest
 
 distrobox-export --app code
 distrobox-export --bin /usr/bin/nu
-# distrobox-export --bin /usr/bin/podman-compose
+distrobox-export --bin /usr/bin/podman-compose
