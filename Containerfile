@@ -60,6 +60,14 @@ RUN dnf install -y https://github.com/sigstore/cosign/releases/latest/download/c
 
 RUN curl -s https://fluxcd.io/install.sh | bash
 
+RUN curl -s https://api.github.com/repos/vmware-tanzu/velero/releases/latest \
+    | grep "browser_download_url.*linux-amd64.tar.gz" \
+    | cut -d : -f 2,3 \
+    | tr -d \" \
+    | wget -qi - -O velero.tar.gz
+RUN tar -xvf velero.tar.gz && \
+    install -m 755 velero*/velero /usr/local/bin/velero
+
 RUN sh -c "$(curl -fsLS get.chezmoi.io)"
 
 RUN ln -s /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \ 
