@@ -18,6 +18,8 @@ RUN sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
 
 RUN dnf copr enable atim/nushell -y
 
+RUN sudo rpm -i https://ftp.postgresql.org/pub/pgadmin/pgadmin4/yum/pgadmin4-fedora-repo-2-1.noarch.rpm
+
 RUN dnf config-manager --add-repo https://mise.jdx.dev/rpm/mise.repo
 
 RUN dnf update -y && \
@@ -35,6 +37,8 @@ RUN dnf update -y && \
     kubectl \
     nushell \
     podman-compose \
+    python3 \
+    python3-pip \
     rustup \
     code \
     xclip \
@@ -43,7 +47,8 @@ RUN dnf update -y && \
     wget \
     skopeo \
     gcc \
-    gcc-c++
+    gcc-c++ \ 
+    pgadmin4 
 
 RUN dnf clean all
 
