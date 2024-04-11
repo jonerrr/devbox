@@ -16,6 +16,11 @@ EOF
 RUN sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
     sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
 
+RUN curl -1sLf \
+    'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.rpm.sh' \
+    | sudo -E bash
+
+
 RUN dnf copr enable atim/nushell -y
 
 RUN sudo rpm -i https://ftp.postgresql.org/pub/pgadmin/pgadmin4/yum/pgadmin4-fedora-repo-2-1.noarch.rpm
