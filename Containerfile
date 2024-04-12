@@ -43,6 +43,7 @@ RUN dnf update -y && \
     nushell \
     podman-compose \
     python3 \
+    postgresql \
     python3-pip \
     rustup \
     code \
