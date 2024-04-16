@@ -49,6 +49,7 @@ RUN dnf update -y && \
     git \
     age \
     conda \
+    GraphicsMagick \
     jq \
     neovim \
     tldr \
