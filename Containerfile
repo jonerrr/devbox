@@ -106,6 +106,14 @@ RUN tar -xvf velero.tar.gz && \
 # install chezmoi
 RUN sh -c "$(curl -fsLS get.chezmoi.io)"
 
+# install tanka
+RUN sudo curl -Lo /usr/local/bin/tk https://github.com/grafana/tanka/releases/latest/download/tk-linux-amd64 && \
+    sudo chmod a+x /usr/local/bin/tk
+
+# install jsonnet bundler
+RUN sudo curl -Lo /usr/local/bin/jb https://github.com/jsonnet-bundler/jsonnet-bundler/releases/latest/download/jb-linux-amd64 && \
+    sudo chmod a+x /usr/local/bin/jb
+
 # link tools
 
 RUN ln -s /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \ 
