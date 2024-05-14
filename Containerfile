@@ -59,6 +59,7 @@ RUN dnf update -y && \
     kubectl \
     nushell \
     podman-compose \
+    protobuf-compiler \
     python3 \
     postgresql \
     python3-pip \
