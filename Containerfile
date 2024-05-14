@@ -38,9 +38,6 @@ RUN curl -1sLf \
 # add nushell copr
 RUN dnf copr enable atim/nushell -y
 
-
-# RUN rpm -i https://ftp.postgresql.org/pub/pgadmin/pgadmin4/yum/pgadmin4-fedora-repo-2-1.noarch.rpm
-
 # add mise repo
 RUN dnf config-manager --add-repo https://mise.jdx.dev/rpm/mise.repo
 
@@ -50,6 +47,7 @@ RUN dnf update -y && \
     age \
     conda \
     GraphicsMagick \
+    golang \
     jq \
     neovim \
     tldr \
@@ -72,8 +70,7 @@ RUN dnf update -y && \
     wget \
     skopeo \
     gcc \
-    gcc-c++ \ 
-    pgadmin4 
+    gcc-c++
 
 RUN dnf clean all
 
@@ -114,8 +111,14 @@ RUN sudo curl -Lo /usr/local/bin/tk https://github.com/grafana/tanka/releases/la
 RUN sudo curl -Lo /usr/local/bin/jb https://github.com/jsonnet-bundler/jsonnet-bundler/releases/latest/download/jb-linux-amd64 && \
     sudo chmod a+x /usr/local/bin/jb
 
-# link tools
+# install cilium
+RUN CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable-v0.14.txt) && \
+    curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-amd64.tar.gz{,.sha256sum} && \
+    sha256sum --check cilium-linux-amd64.tar.gz.sha256sum && \
+    tar xzvfC cilium-linux-amd64.tar.gz /usr/local/bin && \
+    rm cilium-linux-amd64.tar.gz{,.sha256sum}
 
+# link tools
 RUN ln -s /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \ 
     ln -s /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
     ln -s /usr/bin/distrobox-host-exec /usr/local/bin/podman-compose && \
