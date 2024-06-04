@@ -71,8 +71,7 @@ RUN dnf update -y && \
     wget \
     skopeo \
     gcc \
-    gcc-c++ \
-    vips
+    gcc-c++
 
 RUN dnf clean all
 
