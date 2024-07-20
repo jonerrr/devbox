@@ -102,6 +102,14 @@ RUN curl -s https://api.github.com/repos/vmware-tanzu/velero/releases/latest \
 RUN tar -xvf velero.tar.gz && \
     install -m 755 velero*/velero /usr/local/bin/velero
 
+# Install sops
+RUN curl -s https://api.github.com/repos/getsops/sops/releases/latest \
+    | grep "browser_download_url.*.x86_64.rpm" \
+    | cut -d : -f 2,3 \
+    | tr -d \" \
+    | wget -qi -
+RUN rpm -i sops*.rpm
+
 # install chezmoi
 RUN sh -c "$(curl -fsLS get.chezmoi.io)"
 
