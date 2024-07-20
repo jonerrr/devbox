@@ -105,14 +105,6 @@ RUN tar -xvf velero.tar.gz && \
 # install chezmoi
 RUN sh -c "$(curl -fsLS get.chezmoi.io)"
 
-# install tanka
-RUN sudo curl -Lo /usr/local/bin/tk https://github.com/grafana/tanka/releases/latest/download/tk-linux-amd64 && \
-    sudo chmod a+x /usr/local/bin/tk
-
-# install jsonnet bundler
-RUN sudo curl -Lo /usr/local/bin/jb https://github.com/jsonnet-bundler/jsonnet-bundler/releases/latest/download/jb-linux-amd64 && \
-    sudo chmod a+x /usr/local/bin/jb
-
 # install cilium
 RUN CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable-v0.14.txt) && \
     curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-amd64.tar.gz{,.sha256sum} && \
