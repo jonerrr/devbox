@@ -41,6 +41,8 @@ RUN dnf copr enable atim/nushell -y
 # add mise repo
 RUN dnf config-manager --add-repo https://mise.jdx.dev/rpm/mise.repo
 
+RUN dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
+
 RUN dnf update -y && \
     dnf install -y \
     git \
@@ -48,6 +50,7 @@ RUN dnf update -y && \
     conda \
     GraphicsMagick \
     golang \
+    gh \
     jq \
     neovim \
     tldr \
