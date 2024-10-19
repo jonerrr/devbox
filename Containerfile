@@ -75,7 +75,8 @@ RUN dnf update -y && \
     skopeo \
     gcc \
     gcc-c++ \
-    vips-tools
+    vips-tools \
+    pipx
 
 RUN dnf clean all
 

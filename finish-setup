@@ -15,4 +15,6 @@ distrobox-export --app code
 # distrobox-export --bin /usr/bin/nu
 # distrobox-export --bin /usr/bin/podman-compose
 
+pipx ensurepath --global
+
 echo "Run mise activate nu"
