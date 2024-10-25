@@ -117,6 +117,9 @@ RUN rpm -i sops*.rpm
 # install chezmoi
 RUN sh -c "$(curl -fsLS get.chezmoi.io)"
 
+# install scc
+RUN go install github.com/boyter/scc/v3@latest
+
 # install cilium
 RUN CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable-v0.14.txt) && \
     curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-amd64.tar.gz{,.sha256sum} && \
