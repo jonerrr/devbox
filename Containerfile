@@ -5,26 +5,16 @@ LABEL com.github.containers.toolbox="true"
 # get ready for installing
 RUN dnf install -y dnf-plugins-core
 
-# add kubectl repo
-RUN cat <<EOF | tee /etc/yum.repos.d/kubernetes.repo
-[kubernetes]
-name=Kubernetes
-baseurl=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/
-enabled=1
-gpgcheck=1
-gpgkey=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/repodata/repomd.xml.key
-EOF
-
 # install conda repos
-RUN rpm --import https://repo.anaconda.com/pkgs/misc/gpgkeys/anaconda.asc
-RUN cat <<EOF | tee /etc/yum.repos.d/conda.repo
-[conda]
-name=Conda
-baseurl=https://repo.anaconda.com/pkgs/misc/rpmrepo/conda
-enabled=1
-gpgcheck=1
-gpgkey=https://repo.anaconda.com/pkgs/misc/gpgkeys/anaconda.asc
-EOF
+# RUN rpm --import https://repo.anaconda.com/pkgs/misc/gpgkeys/anaconda.asc
+# RUN cat <<EOF | tee /etc/yum.repos.d/conda.repo
+# [conda]
+# name=Conda
+# baseurl=https://repo.anaconda.com/pkgs/misc/rpmrepo/conda
+# enabled=1
+# gpgcheck=1
+# gpgkey=https://repo.anaconda.com/pkgs/misc/gpgkeys/anaconda.asc
+# EOF
 
 # install vscode repo
 RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
@@ -47,7 +37,7 @@ RUN dnf update -y && \
     dnf install -y \
     git \
     age \
-    conda \
+    # conda \
     GraphicsMagick \
     golang \
     gh \
@@ -59,7 +49,7 @@ RUN dnf update -y && \
     zip \
     p7zip \
     helm \
-    kubectl \
+    kubernetes-client \
     nushell \
     podman-compose \
     protobuf-compiler \
@@ -128,7 +118,7 @@ RUN CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium
     rm cilium-linux-amd64.tar.gz{,.sha256sum}
 
 # link tools
-RUN ln -s /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \ 
+RUN ln -s /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \
     ln -s /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
     ln -s /usr/bin/distrobox-host-exec /usr/local/bin/podman-compose && \
     ln -s /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree && \

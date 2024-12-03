@@ -1,8 +1,7 @@
 set -oue pipefail
 
 cargo install sqlx-cli --no-default-features --features native-tls,postgres
-cargo install cargo-edit
-cargo install --locked blue-build
+cargo install --locked blue-build cargo-edit dua-cli tex-fmt
 
 mise plugin install pnpm protoc -y
 mise use -g node@20
