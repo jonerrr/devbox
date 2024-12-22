@@ -1,4 +1,4 @@
-FROM registry.fedoraproject.org/fedora-toolbox:39 
+FROM registry.fedoraproject.org/fedora-toolbox:41
 
 LABEL com.github.containers.toolbox="true"
 
@@ -21,17 +21,20 @@ RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
     sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
 
 # install infisical repo
-RUN curl -1sLf \
-    'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.rpm.sh' \
-    | bash
+# RUN curl -1sLf \
+#     'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.rpm.sh' \
+#     | bash
 
 # add nushell copr
 RUN dnf copr enable atim/nushell -y
 
 # add mise repo
-RUN dnf config-manager --add-repo https://mise.jdx.dev/rpm/mise.repo
+# RUN dnf config-manager --add-repo https://mise.jdx.dev/rpm/mise.repo
 
-RUN dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
+# RUN dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
+
+RUN curl https://mise.jdx.dev/rpm/mise.repo > /etc/yum.repos.d/mise.repo
+RUN curl https://cli.github.com/packages/rpm/gh-cli.repo > /etc/yum.repos.d/gh-cli.repo
 
 RUN dnf update -y && \
     dnf install -y \
@@ -110,12 +113,28 @@ RUN sh -c "$(curl -fsLS get.chezmoi.io)"
 # install scc
 RUN go install github.com/boyter/scc/v3@latest
 
-# install cilium
-RUN CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable-v0.14.txt) && \
-    curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-amd64.tar.gz{,.sha256sum} && \
-    sha256sum --check cilium-linux-amd64.tar.gz.sha256sum && \
-    tar xzvfC cilium-linux-amd64.tar.gz /usr/local/bin && \
-    rm cilium-linux-amd64.tar.gz{,.sha256sum}
+# # install cilium
+# RUN CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable-v0.14.txt) && \
+#     curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-amd64.tar.gz{,.sha256sum} && \
+#     sha256sum --check cilium-linux-amd64.tar.gz.sha256sum && \
+#     tar xzvfC cilium-linux-amd64.tar.gz /usr/local/bin && \
+#     rm cilium-linux-amd64.tar.gz{,.sha256sum}
+
+# RUN curl -s https://api.github.com/repos/cilium/cilium-cli/releases/latest \
+#     | grep "browser_download_url.*linux-amd64.tar.gz" \
+#     | cut -d : -f 2,3 \
+#     | tr -d \" \
+#     | wget -qi - -O cilium.tar.gz
+# RUN tar -xvf cilium.tar.gz && \
+#     install -m 755 cilium*/cilium /usr/local/bin/cilium
+RUN CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt) && \
+    CLI_ARCH=amd64 && \
+    if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi && \
+    curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum} && \
+    sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum && \
+    sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin && \
+    rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
+
 
 # link tools
 RUN ln -s /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \

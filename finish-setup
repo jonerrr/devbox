@@ -3,10 +3,11 @@ set -oue pipefail
 cargo install sqlx-cli --no-default-features --features native-tls,postgres
 cargo install --locked blue-build cargo-edit dua-cli tex-fmt
 
-mise plugin install pnpm protoc -y
+mise plugin install pnpm protoc uv -y
 mise use -g node@20
 mise use -g pnpm@latest
 mise use -g protoc@latest
+mise use -g uv@latest
 
 curl -sS https://webinstall.dev/k9s | bash
 
