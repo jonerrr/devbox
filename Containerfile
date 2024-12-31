@@ -42,6 +42,7 @@ RUN dnf update -y && \
     age \
     # conda \
     GraphicsMagick \
+    clang \
     golang \
     gh \
     jq \
@@ -53,6 +54,7 @@ RUN dnf update -y && \
     p7zip \
     helm \
     kubernetes-client \
+    mold \
     nushell \
     podman-compose \
     protobuf-compiler \
