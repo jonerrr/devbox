@@ -43,9 +43,11 @@ RUN dnf update -y && \
     # conda \
     GraphicsMagick \
     clang \
+    cmake \
     golang \
     gh \
     jq \
+    fira-code-fonts \
     neovim \
     tldr \
     nss-tools \
@@ -54,6 +56,12 @@ RUN dnf update -y && \
     p7zip \
     helm \
     kubernetes-client \
+    libXrandr-devel \
+    libXinerama-devel \
+    libXcursor-devel \
+    libx11-dev \
+    libXi-devel \
+    vulkan-devel \
     mold \
     nushell \
     podman-compose \
