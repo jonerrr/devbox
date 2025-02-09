@@ -59,7 +59,7 @@ RUN dnf update -y && \
     libXrandr-devel \
     libXinerama-devel \
     libXcursor-devel \
-    libx11-dev \
+    libX11-devel \
     libXi-devel \
     vulkan-devel \
     mold \
