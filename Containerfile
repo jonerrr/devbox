@@ -62,6 +62,9 @@ RUN dnf update -y && \
     libX11-devel \
     libXi-devel \
     vulkan-devel \
+    glslc \
+    libshaderc-devel \
+    mesa-libGL-devel \
     mold \
     nushell \
     podman-compose \
