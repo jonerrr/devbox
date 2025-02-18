@@ -27,6 +27,8 @@ RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
 
 # add nushell copr
 RUN dnf copr enable atim/nushell -y
+# add scc copr
+RUN dnf copr enable lihaohong/scc -y
 
 # add mise repo
 # RUN dnf config-manager --add-repo https://mise.jdx.dev/rpm/mise.repo
@@ -69,20 +71,18 @@ RUN dnf update -y && \
     nushell \
     podman-compose \
     protobuf-compiler \
-    python3 \
     postgresql \
-    python3-pip \
     rustup \
     code \
     xclip \
     openssl-devel \
     mise \
     wget \
+    scc \
     skopeo \
     gcc \
     gcc-c++ \
-    vips-tools \
-    pipx
+    vips-tools
 
 RUN dnf clean all
 
@@ -124,7 +124,7 @@ RUN rpm -i sops*.rpm
 RUN sh -c "$(curl -fsLS get.chezmoi.io)"
 
 # install scc
-RUN go install github.com/boyter/scc/v3@latest
+# RUN go install github.com/boyter/scc/v3@latest
 
 # # install cilium
 # RUN CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable-v0.14.txt) && \
