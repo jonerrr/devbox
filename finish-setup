@@ -12,12 +12,12 @@ mise use -g krew@latest
 
 krew install cnpg
 
-curl -sS https://webinstall.dev/k9s | bash
-
 distrobox-export --app code
 # distrobox-export --bin /usr/bin/nu
 # distrobox-export --bin /usr/bin/podman-compose
 
-pipx ensurepath --global
+# pipx ensurepath --global
+
+uv tool install pre-commit
 
 echo "Run mise activate nu"

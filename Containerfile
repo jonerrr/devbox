@@ -29,6 +29,8 @@ RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
 RUN dnf copr enable atim/nushell -y
 # add scc copr
 RUN dnf copr enable lihaohong/scc -y
+# add k9s copr
+RUN dnf copr enable luminoso/k9s -y
 
 # add mise repo
 # RUN dnf config-manager --add-repo https://mise.jdx.dev/rpm/mise.repo
@@ -58,12 +60,14 @@ RUN dnf update -y && \
     p7zip \
     helm \
     kubernetes-client \
+    k9s \
     libXrandr-devel \
     libXinerama-devel \
     libXcursor-devel \
     libX11-devel \
     libXi-devel \
     vulkan-devel \
+    vulkan-tools \
     glslc \
     libshaderc-devel \
     mesa-libGL-devel \
@@ -82,7 +86,8 @@ RUN dnf update -y && \
     skopeo \
     gcc \
     gcc-c++ \
-    vips-tools
+    vips-tools \
+    @development-tools
 
 RUN dnf clean all
 
