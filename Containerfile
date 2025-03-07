@@ -125,6 +125,12 @@ RUN curl -s https://api.github.com/repos/getsops/sops/releases/latest \
     | wget -qi -
 RUN rpm -i sops*.rpm
 
+# install bitwarden cli
+RUN curl -L "https://vault.bitwarden.com/download/?app=cli&platform=linux" -o bw.zip && \
+    unzip bw.zip -d /usr/local/bin && \
+    chmod +x /usr/local/bin/bw && \
+    rm bw.zip
+
 # install chezmoi
 RUN sh -c "$(curl -fsLS get.chezmoi.io)"
 
@@ -152,7 +158,6 @@ RUN CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium
     sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum && \
     sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin && \
     rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
-
 
 # link tools
 RUN ln -s /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \
