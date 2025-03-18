@@ -47,6 +47,7 @@ RUN dnf update -y && \
     # conda \
     GraphicsMagick \
     clang \
+    clang-tools-extra \
     cmake \
     golang \
     gh \
