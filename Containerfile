@@ -52,6 +52,8 @@ RUN dnf update -y && \
     golang \
     gh \
     jq \
+    java-21-openjdk \
+    java-21-openjdk-devel \
     fira-code-fonts \
     neovim \
     tldr \
