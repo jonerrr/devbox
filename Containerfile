@@ -1,4 +1,4 @@
-FROM registry.fedoraproject.org/fedora-toolbox:41
+FROM registry.fedoraproject.org/fedora-toolbox:42
 
 LABEL com.github.containers.toolbox="true"
 
@@ -26,7 +26,7 @@ RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
 #     | bash
 
 # add nushell copr
-RUN dnf copr enable atim/nushell -y
+# RUN dnf copr enable atim/nushell -y
 # add scc copr
 RUN dnf copr enable lihaohong/scc -y
 # add k9s copr
@@ -75,7 +75,6 @@ RUN dnf update -y && \
     libshaderc-devel \
     mesa-libGL-devel \
     mold \
-    nushell \
     podman-compose \
     protobuf-compiler \
     postgresql \
@@ -92,13 +91,11 @@ RUN dnf update -y && \
     vips-tools \
     @development-tools
 
-RUN dnf clean all
-
 # install kubeseal
-RUN KUBESEAL_VERSION=$(curl -s https://api.github.com/repos/bitnami-labs/sealed-secrets/tags | jq -r '.[0].name' | cut -c 2-) && \
-    wget "https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-amd64.tar.gz" && \
-    tar -xzf kubeseal-${KUBESEAL_VERSION}-linux-amd64.tar.gz kubeseal && \
-    install -m 755 kubeseal /usr/local/bin/kubeseal
+# RUN KUBESEAL_VERSION=$(curl -s https://api.github.com/repos/bitnami-labs/sealed-secrets/tags | jq -r '.[0].name' | cut -c 2-) && \
+#     wget "https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-amd64.tar.gz" && \
+#     tar -xzf kubeseal-${KUBESEAL_VERSION}-linux-amd64.tar.gz kubeseal && \
+#     install -m 755 kubeseal /usr/local/bin/kubeseal
 
 # install mkcert
 RUN curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" && \
@@ -112,13 +109,22 @@ RUN dnf install -y https://github.com/sigstore/cosign/releases/latest/download/c
 RUN curl -s https://fluxcd.io/install.sh | bash
 
 # install velero
-RUN curl -s https://api.github.com/repos/vmware-tanzu/velero/releases/latest \
-    | grep "browser_download_url.*linux-amd64.tar.gz" \
+# RUN curl -s https://api.github.com/repos/vmware-tanzu/velero/releases/latest \
+#     | grep "browser_download_url.*linux-amd64.tar.gz" \
+#     | cut -d : -f 2,3 \
+#     | tr -d \" \
+#     | wget -qi - -O velero.tar.gz
+# RUN tar -xvf velero.tar.gz && \
+#     install -m 755 velero*/velero /usr/local/bin/velero
+
+# install nushell
+RUN curl -s https://api.github.com/repos/nushell/nushell/releases/latest \
+    | grep "browser_download_url.*aarch64-unknown-linux-gnu.tar.gz" \
     | cut -d : -f 2,3 \
     | tr -d \" \
-    | wget -qi - -O velero.tar.gz
-RUN tar -xvf velero.tar.gz && \
-    install -m 755 velero*/velero /usr/local/bin/velero
+    | wget -qi - -O nu.tar.gz
+RUN tar -xvf nu.tar.gz && \
+    install -m 755 nu*/nu /usr/local/bin/nu
 
 # Install sops
 RUN curl -s https://api.github.com/repos/getsops/sops/releases/latest \
@@ -137,23 +143,7 @@ RUN curl -L "https://vault.bitwarden.com/download/?app=cli&platform=linux" -o bw
 # install chezmoi
 RUN sh -c "$(curl -fsLS get.chezmoi.io)"
 
-# install scc
-# RUN go install github.com/boyter/scc/v3@latest
-
-# # install cilium
-# RUN CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable-v0.14.txt) && \
-#     curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-amd64.tar.gz{,.sha256sum} && \
-#     sha256sum --check cilium-linux-amd64.tar.gz.sha256sum && \
-#     tar xzvfC cilium-linux-amd64.tar.gz /usr/local/bin && \
-#     rm cilium-linux-amd64.tar.gz{,.sha256sum}
-
-# RUN curl -s https://api.github.com/repos/cilium/cilium-cli/releases/latest \
-#     | grep "browser_download_url.*linux-amd64.tar.gz" \
-#     | cut -d : -f 2,3 \
-#     | tr -d \" \
-#     | wget -qi - -O cilium.tar.gz
-# RUN tar -xvf cilium.tar.gz && \
-#     install -m 755 cilium*/cilium /usr/local/bin/cilium
+# install cilium
 RUN CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt) && \
     CLI_ARCH=amd64 && \
     if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi && \
@@ -161,6 +151,8 @@ RUN CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium
     sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum && \
     sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin && \
     rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
+
+RUN dnf clean all
 
 # link tools
 RUN ln -s /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \
