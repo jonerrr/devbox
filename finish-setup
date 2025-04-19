@@ -1,7 +1,9 @@
+#!/usr/bin/env bash
 set -oue pipefail
 
 cargo install sqlx-cli --no-default-features --features native-tls,postgres
-cargo install --locked blue-build cargo-edit dua-cli tex-fmt
+# cargo install --locked blue-build cargo-edit dua-cli tex-fmt
+cargo install --locked cargo-edit dua-cli tex-fmt
 
 mise plugin install pnpm protoc uv krew -y
 mise use -g node@latest
