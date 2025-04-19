@@ -65,6 +65,7 @@ RUN dnf update -y && \
     neovim \
     nushell \
     tldr \
+    tilp2 \
     nss-tools \
     unzip \
     zip \
