@@ -25,10 +25,17 @@ RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
 #     'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.rpm.sh' \
 #     | bash
 
-# add nushell copr
-# RUN dnf copr enable atim/nushell -y
+# Add gemfury nushell repo
+RUN echo "[gemfury-nushell]" > /etc/yum.repos.d/fury-nushell.repo && \
+    echo "name=Gemfury Nushell Repo" >> /etc/yum.repos.d/fury-nushell.repo && \
+    echo "baseurl=https://yum.fury.io/nushell/" >> /etc/yum.repos.d/fury-nushell.repo && \
+    echo "enabled=1" >> /etc/yum.repos.d/fury-nushell.repo && \
+    echo "gpgcheck=0" >> /etc/yum.repos.d/fury-nushell.repo && \
+    echo "gpgkey=https://yum.fury.io/nushell/gpg.key" >> /etc/yum.repos.d/fury-nushell.repo
+
 # add scc copr
 RUN dnf copr enable lihaohong/scc -y
+
 # add k9s copr
 RUN dnf copr enable luminoso/k9s -y
 
@@ -56,6 +63,7 @@ RUN dnf update -y && \
     java-21-openjdk-devel \
     fira-code-fonts \
     neovim \
+    nushell \
     tldr \
     nss-tools \
     unzip \
@@ -118,13 +126,13 @@ RUN curl -s https://fluxcd.io/install.sh | bash
 #     install -m 755 velero*/velero /usr/local/bin/velero
 
 # install nushell
-RUN curl -s https://api.github.com/repos/nushell/nushell/releases/latest \
-    | grep "browser_download_url.*aarch64-unknown-linux-gnu.tar.gz" \
-    | cut -d : -f 2,3 \
-    | tr -d \" \
-    | wget -qi - -O nu.tar.gz
-RUN tar -xvf nu.tar.gz && \
-    install -m 755 nu*/nu /usr/local/bin/nu
+# RUN curl -s https://api.github.com/repos/nushell/nushell/releases/latest \
+#     | grep "browser_download_url.*aarch64-unknown-linux-gnu.tar.gz" \
+#     | cut -d : -f 2,3 \
+#     | tr -d \" \
+#     | wget -qi - -O nu.tar.gz
+# RUN tar -xvf nu.tar.gz && \
+#     install -m 755 nu*/nu /usr/local/bin/nu
 
 # Install sops
 RUN curl -s https://api.github.com/repos/getsops/sops/releases/latest \
