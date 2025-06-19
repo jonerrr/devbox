@@ -95,9 +95,11 @@ RUN dnf update -y && \
     wget \
     scc \
     skopeo \
+    sqlite-devel \
     gcc \
     gcc-c++ \
     vips-tools \
+    zlib-devel \
     @development-tools
 
 # install kubeseal
