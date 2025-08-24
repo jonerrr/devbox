@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 set -oue pipefail
 
-cargo install sqlx-cli --no-default-features --features native-tls,postgres
+# cargo install sqlx-cli --no-default-features --features native-tls,postgres
 # cargo install --locked blue-build cargo-edit dua-cli tex-fmt
-cargo install --locked cargo-edit dua-cli tex-fmt
+# cargo install --locked cargo-edit dua-cli tex-fmt
 
-mise plugin install pnpm protoc uv krew -y
-mise use -g node@latest
-mise use -g pnpm@latest
-mise use -g protoc@latest
-mise use -g uv@latest
-mise use -g krew@latest
+# mise plugin install pnpm protoc uv krew -y
+# mise use -g node@latest
+# mise use -g pnpm@latest
+# mise use -g protoc@latest
+# mise use -g uv@latest
+# mise use -g krew@latest
 
-krew install cnpg
+# krew install cnpg
 
 distrobox-export --app code
 # distrobox-export --bin /usr/bin/nu
@@ -20,6 +20,6 @@ distrobox-export --app code
 
 # pipx ensurepath --global
 
-uv tool install pre-commit
+# uv tool install pre-commit
 
-echo "Run mise activate nu"
+# echo ""
