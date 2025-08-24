@@ -31,6 +31,7 @@ RUN dnf update -y && \
     dnf install -y \
     git \
     age \
+    btop \
     GraphicsMagick \
     clang \
     clang-tools-extra \
