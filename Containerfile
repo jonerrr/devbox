@@ -17,11 +17,6 @@ RUN echo "[gemfury-nushell]" > /etc/yum.repos.d/fury-nushell.repo && \
     echo "gpgcheck=0" >> /etc/yum.repos.d/fury-nushell.repo && \
     echo "gpgkey=https://yum.fury.io/nushell/gpg.key" >> /etc/yum.repos.d/fury-nushell.repo
 
-# add scc copr
-# RUN dnf copr enable lihaohong/scc -y
-
-# add k9s copr
-# RUN dnf copr enable luminoso/k9s -y
 
 # add mise and gh repos
 RUN curl https://mise.jdx.dev/rpm/mise.repo > /etc/yum.repos.d/mise.repo
@@ -40,6 +35,7 @@ RUN dnf update -y && \
     gh \
     jq \
     fira-code-fonts \
+    ffmpeg \
     neovim \
     nushell \
     tldr \
@@ -78,37 +74,6 @@ RUN dnf update -y && \
     zlib-devel \
     @development-tools
 
-# install cosign
-# RUN dnf install -y https://github.com/sigstore/cosign/releases/latest/download/cosign-$(curl https://api.github.com/repos/sigstore/cosign/releases/latest | grep tag_name | cut -d : -f2 | tr -d "v\", ")-1.x86_64.rpm
-
-# install flux cli
-# RUN curl -s https://fluxcd.io/install.sh | bash
-
-# Install sops
-# RUN curl -s https://api.github.com/repos/getsops/sops/releases/latest \
-#     | grep "browser_download_url.*.x86_64.rpm" \
-#     | cut -d : -f 2,3 \
-#     | tr -d \" \
-#     | wget -qi -
-# RUN rpm -i sops*.rpm
-
-# install bitwarden cli
-# RUN curl -L "https://vault.bitwarden.com/download/?app=cli&platform=linux" -o bw.zip && \
-#     unzip bw.zip -d /usr/local/bin && \
-#     chmod +x /usr/local/bin/bw && \
-#     rm bw.zip
-
-# install chezmoi
-# RUN sh -c "$(curl -fsLS get.chezmoi.io)"
-
-# install cilium
-# RUN CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt) && \
-#     CLI_ARCH=amd64 && \
-#     if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi && \
-#     curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum} && \
-#     sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum && \
-#     sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin && \
-#     rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
 
 RUN dnf clean all
 
