@@ -1,4 +1,4 @@
-FROM registry.fedoraproject.org/fedora-toolbox:42
+FROM registry.fedoraproject.org/fedora-toolbox:43
 
 LABEL com.github.containers.toolbox="true"
 
@@ -19,8 +19,8 @@ RUN echo "[gemfury-nushell]" > /etc/yum.repos.d/fury-nushell.repo && \
 
 
 # add mise and gh repos
-RUN curl https://mise.jdx.dev/rpm/mise.repo > /etc/yum.repos.d/mise.repo
-RUN curl https://cli.github.com/packages/rpm/gh-cli.repo > /etc/yum.repos.d/gh-cli.repo
+# RUN curl https://mise.jdx.dev/rpm/mise.repo > /etc/yum.repos.d/mise.repo
+# RUN curl https://cli.github.com/packages/rpm/gh-cli.repo > /etc/yum.repos.d/gh-cli.repo
 
 RUN dnf update -y && \
     dnf install -y \
@@ -32,9 +32,7 @@ RUN dnf update -y && \
     clang-tools-extra \
     cmake \
     golang \
-    gh \
     jq \
-    fira-code-fonts \
     ffmpeg \
     neovim \
     nushell \
@@ -44,9 +42,6 @@ RUN dnf update -y && \
     unzip \
     zip \
     p7zip \
-    helm \
-    kubernetes-client \
-    k9s \
     libXrandr-devel \
     libXinerama-devel \
     libXcursor-devel \
@@ -58,15 +53,13 @@ RUN dnf update -y && \
     libshaderc-devel \
     mesa-libGL-devel \
     mold \
-    podman-compose \
+    # podman-compose \
     postgresql \
     rustup \
     code \
     xclip \
     openssl-devel \
-    mise \
     wget \
-    skopeo \
     sqlite-devel \
     gcc \
     gcc-c++ \
@@ -81,10 +74,10 @@ RUN dnf clean all
 RUN ln -s /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \
     ln -s /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
     ln -s /usr/bin/distrobox-host-exec /usr/local/bin/podman-compose && \
-    ln -s /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree && \
+    # ln -s /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree && \
     ln -s /usr/bin/distrobox-host-exec /usr/bin/restic && \
     ln -s /usr/bin/distrobox-host-exec /usr/bin/rclone && \
-    ln -s /usr/bin/distrobox-host-exec /usr/local/bin/resticprofile && \
+    # ln -s /usr/bin/distrobox-host-exec /usr/local/bin/resticprofile && \
     ln -s /usr/bin/distrobox-host-exec /usr/local/bin/xdg-open
 
 # COPY finish-setup /usr/local/bin/finish-setup
