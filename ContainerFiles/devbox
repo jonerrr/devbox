@@ -74,6 +74,7 @@ RUN dnf clean all
 RUN ln -s /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \
     ln -s /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
     ln -s /usr/bin/distrobox-host-exec /usr/local/bin/podman-compose && \
+    ln -s /usr/bin/distrobox-host-exec /usr/bin/mise && \
     # ln -s /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree && \
     ln -s /usr/bin/distrobox-host-exec /usr/bin/restic && \
     ln -s /usr/bin/distrobox-host-exec /usr/bin/rclone && \
