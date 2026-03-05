@@ -28,6 +28,7 @@ RUN dnf update -y && \
     age \
     btop \
     GraphicsMagick \
+    gnome-keyring \
     clang \
     clang-tools-extra \
     cmake \
