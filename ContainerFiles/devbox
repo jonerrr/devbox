@@ -47,6 +47,9 @@ RUN dnf update -y && \
     libXcursor-devel \
     libX11-devel \
     libXi-devel \
+    usbmuxd \
+    libusbmuxd-utils \
+    libusbmuxd \
     vulkan-devel \
     vulkan-tools \
     glslc \
