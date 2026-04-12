@@ -19,7 +19,7 @@ RUN echo "[gemfury-nushell]" > /etc/yum.repos.d/fury-nushell.repo && \
 
 
 # add mise and gh repos
-# RUN curl https://mise.jdx.dev/rpm/mise.repo > /etc/yum.repos.d/mise.repo
+RUN curl https://mise.jdx.dev/rpm/mise.repo > /etc/yum.repos.d/mise.repo
 # RUN curl https://cli.github.com/packages/rpm/gh-cli.repo > /etc/yum.repos.d/gh-cli.repo
 
 RUN dnf update -y && \
@@ -32,6 +32,7 @@ RUN dnf update -y && \
     cmake \
     jq \
     ffmpeg \
+    mise \
     neovim \
     nushell \
     tldr \
@@ -75,7 +76,7 @@ RUN dnf clean all
 RUN ln -s /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \
     ln -s /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
     ln -s /usr/bin/distrobox-host-exec /usr/local/bin/podman-compose && \
-    ln -s /usr/bin/distrobox-host-exec /usr/bin/mise && \
+    # ln -s /usr/bin/distrobox-host-exec /usr/bin/mise && \
     # ln -s /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree && \
     ln -s /usr/bin/distrobox-host-exec /usr/bin/restic && \
     ln -s /usr/bin/distrobox-host-exec /usr/bin/rclone && \
