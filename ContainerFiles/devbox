@@ -24,6 +24,7 @@ RUN curl https://mise.jdx.dev/rpm/mise.repo > /etc/yum.repos.d/mise.repo
 
 RUN dnf update -y && \
     dnf install -y \
+    android-tools \
     git \
     age \
     GraphicsMagick \
