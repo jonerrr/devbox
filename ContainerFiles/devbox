@@ -1,15 +1,20 @@
-FROM registry.fedoraproject.org/fedora-toolbox:43
+FROM registry.fedoraproject.org/fedora-toolbox:44
 
 LABEL com.github.containers.toolbox="true"
 
 # get ready for installing
 RUN dnf install -y dnf-plugins-core
 
-# install vscode repo
+# vscode repo
 RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
-    sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+    echo "[code]" > /etc/yum.repos.d/vscode.repo && \
+    echo "name=Visual Studio Code" >> /etc/yum.repos.d/vscode.repo && \
+    echo "baseurl=https://packages.microsoft.com/yumrepos/vscode" >> /etc/yum.repos.d/vscode.repo && \
+    echo "enabled=1" >> /etc/yum.repos.d/vscode.repo && \
+    echo "gpgcheck=1" >> /etc/yum.repos.d/vscode.repo && \
+    echo "gpgkey=https://packages.microsoft.com/keys/microsoft.asc" >> /etc/yum.repos.d/vscode.repo
 
-# Add gemfury nushell repo
+# gemfury nushell repo
 RUN echo "[gemfury-nushell]" > /etc/yum.repos.d/fury-nushell.repo && \
     echo "name=Gemfury Nushell Repo" >> /etc/yum.repos.d/fury-nushell.repo && \
     echo "baseurl=https://yum.fury.io/nushell/" >> /etc/yum.repos.d/fury-nushell.repo && \
@@ -17,20 +22,36 @@ RUN echo "[gemfury-nushell]" > /etc/yum.repos.d/fury-nushell.repo && \
     echo "gpgcheck=0" >> /etc/yum.repos.d/fury-nushell.repo && \
     echo "gpgkey=https://yum.fury.io/nushell/gpg.key" >> /etc/yum.repos.d/fury-nushell.repo
 
+# cursor repo
+RUN echo "[cursor]" > /etc/yum.repos.d/cursor.repo && \
+    echo "name=Cursor" >> /etc/yum.repos.d/cursor.repo && \
+    echo "baseurl=https://downloads.cursor.com/yumrepo" >> /etc/yum.repos.d/cursor.repo && \
+    echo "enabled=1" >> /etc/yum.repos.d/cursor.repo && \
+    echo "gpgcheck=1" >> /etc/yum.repos.d/cursor.repo && \
+    echo "gpgkey=https://downloads.cursor.com/keys/anysphere.asc" >> /etc/yum.repos.d/cursor.repo
 
-# add mise and gh repos
+# TODO: find a new repo i, i can't find one for the version of antigravity
+# antigravity repo
+# RUN echo "[antigravity]" > /etc/yum.repos.d/antigravity.repo && \
+#     echo "name=Antigravity RPM Repository" >> /etc/yum.repos.d/antigravity.repo && \
+#     echo "baseurl=https://us-central1-yum.pkg.dev/projects/antigravity-auto-updater-dev/antigravity-rpm" >> /etc/yum.repos.d/antigravity.repo && \
+#     echo "enabled=1" >> /etc/yum.repos.d/antigravity.repo && \
+#     echo "gpgcheck=0" >> /etc/yum.repos.d/antigravity.repo
+
+# mise repo
 RUN curl https://mise.jdx.dev/rpm/mise.repo > /etc/yum.repos.d/mise.repo
-# RUN curl https://cli.github.com/packages/rpm/gh-cli.repo > /etc/yum.repos.d/gh-cli.repo
 
 RUN dnf update -y && \
     dnf install -y \
     android-tools \
+    #    antigravity \
     git \
     age \
     GraphicsMagick \
     clang \
     clang-tools-extra \
     cmake \
+    cursor \
     jq \
     ffmpeg \
     mise \
@@ -61,6 +82,7 @@ RUN dnf update -y && \
     rustup \
     code \
     xclip \
+    openssh-server \
     openssl-devel \
     wget \
     sqlite-devel \
@@ -68,10 +90,39 @@ RUN dnf update -y && \
     gcc-c++ \
     vips-tools \
     zlib-devel \
-    @development-tools
+    @development-tools \
+    ### jetbrains deps
+    libXi \
+    libXrender \
+    libXtst \
+    glx-utils \
+    fontconfig \
+    gtk3 \
+    tar \
+    dbus \
+    xcb-util-keysyms
 
+
+
+# Install JetBrains Toolbox app and expose a stable binary path.
+# 2. Fetch and extract the latest JetBrains Toolbox release
+RUN TOOLBOX_URL=$(curl -s "https://data.services.jetbrains.com/products/releases?code=TBA&latest=true&type=release" | jq -r '.TBA[0].downloads.linux.link') && \
+    curl -sL "$TOOLBOX_URL" -o /tmp/toolbox.tar.gz && \
+    mkdir -p /opt/jetbrains-toolbox && \
+    tar -xzf /tmp/toolbox.tar.gz -C /opt/jetbrains-toolbox --strip-components=1 && \
+    ln -s /opt/jetbrains-toolbox/bin/jetbrains-toolbox /usr/local/bin/jetbrains-toolbox && \
+    rm /tmp/toolbox.tar.gz
+
+# Install ChatGPT app and expose a stable binary path.
+RUN dnf install -y https://persistent.oaistatic.com/codex-app-prod/linux/rpm/latest/chatgpt.x86_64.rpm
 
 RUN dnf clean all
+
+# Generate dummy host keys so the SSH daemon can start instantly
+RUN ssh-keygen -A
+
+# Lock down internal SSH daemon to keys-only
+RUN echo -e "PasswordAuthentication no\nKbdInteractiveAuthentication no" > /etc/ssh/sshd_config.d/90-disable-passwords.conf
 
 # link tools
 RUN ln -s /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \
