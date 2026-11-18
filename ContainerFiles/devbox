@@ -63,6 +63,7 @@ RUN dnf update -y && \
     unzip \
     zip \
     p7zip \
+    pinentry-tty \
     libXrandr-devel \
     libXinerama-devel \
     libXcursor-devel \
@@ -103,7 +104,6 @@ RUN dnf update -y && \
     xcb-util-keysyms
 
 
-
 # Install JetBrains Toolbox app and expose a stable binary path.
 # 2. Fetch and extract the latest JetBrains Toolbox release
 RUN TOOLBOX_URL=$(curl -s "https://data.services.jetbrains.com/products/releases?code=TBA&latest=true&type=release" | jq -r '.TBA[0].downloads.linux.link') && \
@@ -123,6 +123,10 @@ RUN ssh-keygen -A
 
 # Lock down internal SSH daemon to keys-only
 RUN echo -e "PasswordAuthentication no\nKbdInteractiveAuthentication no" > /etc/ssh/sshd_config.d/90-disable-passwords.conf
+
+# Add nu to list of shells
+RUN grep -qxF /usr/bin/nu /etc/shells \
+    || echo /usr/bin/nu >> /etc/shells
 
 # link tools
 RUN ln -s /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \
